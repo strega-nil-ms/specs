@@ -14,9 +14,11 @@ PDF_FILES := $(patsubst %.md,out/%.pdf,$(wildcard *.md))
 
 all: $(PDF_FILES)
 
-out/%.pdf: %.md
-	@mkdir -p out
+out/%.pdf: %.md head.tex out
 	$(PANDOC) $(PANDOC_ARGS) $< -o $@
 
 clean:
 	rm -rf out
+
+out:
+	@mkdir -p out
