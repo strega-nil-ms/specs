@@ -34,6 +34,9 @@ Completing the following tasks will be considered a "success" for Germanium.
   - [ ] bring up a pipeline that builds at least some tests with an ASan-enabled
     compiler without continue-on-error; and
   - [ ] block RI upon the latter pipeline.
+* [ ] Remove false negatives
+  - [ ] start poisoning BE's allocations
+  - [ ] make certain that FE's custom allocators are ASan aware.
 
 I believe that at least the first task is very reasonable in the Germanium
 timeframe; the latter task has more uncertainty in it, since there is a
@@ -44,14 +47,17 @@ however, that the continue-on-error work will be a significant benefit to our
 workflow anyways, so I would consider my work to be a success even without the
 blocking.
 
-### Decisions to be Made
+### Notes
 
-We have some important discussions ahead of us on how exactly this should work.
-They will not really affect how the work is done, or what needs doing, but may
-affect how developers interact with the work:
-
-* [ ] Will the ASan-compiler tests block merging PRs?
-  - [ ] for prod/be? for prod/fe?
-* [ ] Should the tests be done with ret or chk? Both?
+* [x] Will the ASan-compiler tests block merging PRs?
+  - **Yes.**
+* [x] Should the tests be done with ret or chk? Both?
+  - **Investigation needed.** There are a few options:
+  - Always build the chk compiler with ASan.
+  - Do testing with an additional chk asan compiler.
+  - Only make some parts of the compiler build ASan'd, e.g. prod/be only c2 and pdb,
+    and prod/fe only c1
 * [ ] How many/which tests do we want to run with the ASan compiler?
   - [ ] RWC?
+* [ ] Getting chk build clean is also very important &ndash; for example,
+  Office cannot build with chk right now.
